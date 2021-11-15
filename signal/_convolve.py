@@ -56,7 +56,7 @@ def convolve(in1, in2, mode="full", method="fft", axes=None):
 
     Returns
     -------
-    out : array
+    out : parallel array
         An N-dimensional array containing a subset of the discrete linear
         convolution of `in1` with `in2`.
 
@@ -73,9 +73,11 @@ def convolve(in1, in2, mode="full", method="fft", axes=None):
     -----
     This function is a work in progress and there are some possible improvements
     that could be added.
-    These include but are not limited to :
-    * Working out the case where both input are dask arrays.
-    * Giving users the possibility to have the `mode` argument differ between axes.
+    These include but are not limited to:
+        * Working out the case where both input are dask arrays.
+        * Giving users the possibility to have the `mode` argument differ between axes.
+        * Giving users the possibility to use the direct convolution with sums as in ``scipy.signal.convolve``
+
 
 
     Examples
@@ -92,10 +94,10 @@ def convolve(in1, in2, mode="full", method="fft", axes=None):
 
     >>> import matplotlib.pyplot as plt
     >>> fig, (ax_orig, ax_mag) = plt.subplots(2, 1)
-    >>> temp = ax_orig.plot(sig)
-    >>> temp = ax_orig.set_title('White noise')
-    >>> temp = ax_mag.plot(fsig)
-    >>> temp = ax_mag.set_title('Filtered noise')
+    >>> _ = ax_orig.plot(sig)
+    >>> _ = ax_orig.set_title('White noise')
+    >>> _ = ax_mag.plot(fsig)
+    >>> _ = ax_mag.set_title('Filtered noise')
     >>> fig.tight_layout()
     >>> fig.show()
 
@@ -103,9 +105,12 @@ def convolve(in1, in2, mode="full", method="fft", axes=None):
     ----------
     .. [1] Wikipedia, "Overlap-add_method".
            https://en.wikipedia.org/wiki/Overlap-add_method
+
     .. [2] Richard G. Lyons. Understanding Digital Signal Processing,
            Third Edition, 2011. Chapter 13.10.
            ISBN 13: 978-0137-02741-5
+
+
 
 
     """
@@ -169,7 +174,7 @@ def convolve(in1, in2, mode="full", method="fft", axes=None):
             return in_cv
 
     else:
-        # This is kind of a hack but it works. 
+        # This iskind of a hack but it works. 
         not_axes_but_s1_1 = [
             a for a in range(in1.ndim) if a not in axes and s1[a] == 1 and s2[a] != 1
         ]
