@@ -4,7 +4,7 @@ __all__ = [
     "convolve",
 ]
 
-from ._convolve import convolve
+from .signaltools import convolve
 
 
 
